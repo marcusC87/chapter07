@@ -1,0 +1,170 @@
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+#include <string>
+#include <algorithm>
+#include <random>
+using namespace std ;
+
+// Global Variables
+string playername ;
+int playerHealth = 50 ;
+int goldCoins = 0 ;
+int die ;
+bool attackLoop ;
+// End Global Variables
+
+// Functions
+void story () ;
+void playerChoice () ; // ask to continue
+void intro () ; // beginning of story
+int enemyAttack () ; // generates random attack    number
+int playerBlock() ; // generates random block      power number
+void attackSequence () ; //  if statement to determine if attack was more powerful than block 
+void attackLoopFN () ;
+void endingFN () ;
+int rollDie(int sides = 6) ;
+
+// End Functions 
+
+int main() {
+    srand(time(0)) ;
+
+    intro() ;
+
+    playerChoice() ;
+    
+    story() ;
+  do{
+    attackSequence() ;
+
+    playerChoice() ;
+  } while ((attackLoop = true) ) ;
+
+  if(attackLoop == false) endingFN() ;
+  
+}
+
+void story() {
+
+  cout << endl ;
+  cout << "Let's get going then." << endl ;
+  cout << endl ;
+  cout << "Prepare yourself to travel across the" << endl << "universe in search of treasures untold." << endl ;
+  cout << "In order to gain treasure, well.... and survive, " << playername << ", you are \ngoing to have to defeat some enemies" << endl ;
+
+  cout << "Let's see what we encounter first....." << endl ;
+}
+
+void playerChoice(){
+
+  string playerInput ;
+  char playerinputChar ;
+  bool repeat ;
+  cout << playername << ", your health is " << playerHealth << ", and \n" ;
+  cout << "you have " << goldCoins << " gold coins." << endl ;
+  cout << "Do you still want to keep getting your adventure on?" << endl ;
+
+  do{
+
+    cout << endl ;
+    cout << "To play enter 'Yes'." << endl ;
+    cout << endl ;
+    cout << "To not play enter 'No'" << endl ;
+    cout << endl ;
+    cin >> playerInput ;
+    
+    // I used an if statement because I was 
+    // having a problem with my default output
+    // repeating if someone entered more
+    //than 1 char
+
+      if(playerInput == "Yes" || playerInput == "yes" || playerInput == "YES"){
+        playerinputChar = 'Y' ;
+      }
+
+      else if (playerInput == "No" || playerInput == "no" || playerInput == "NO") {
+        playerinputChar = 'N' ;
+      }
+
+      else {
+        playerinputChar = 'D' ;
+      }
+
+    switch(playerinputChar){
+      case 'Y' : 
+        repeat = false ;
+        cout << endl ;
+        cout << "Time to do this!!!!" << endl ;
+        break ;
+        
+      case 'N' :
+        repeat = false ;
+        cout << endl ;
+        cout << "Maybe another time " << playername << "." << endl ;
+        return exit(0) ;
+        
+      default:
+        repeat = true ;
+        cout << endl ;
+        cout << "That's not one of the options, " << playername << ", try again." << endl ;
+        break ;
+    }
+  } while (repeat == true ) ;
+
+}
+
+void intro () {
+
+  cout << endl ;
+  cout << "Welcome to our latest adventure!" << endl;
+  cout << endl ;
+
+  cout << "What is your name?" << endl ;
+  cout << endl ;
+  cin >> playername ;
+  cout<< endl ;
+}
+
+int enemyAttack(){
+  cout << endl ;
+  int eAttack = rand() % 6 + 1 ;
+  return eAttack ;
+  }
+  
+int playerBlock ( ) {
+  cout << endl ;
+  int block = rand() % 6 + 1 ;
+  return block ;
+  
+}
+
+void attackSequence () {
+
+  cout << endl ;
+  cout << "The enemy attacks with an attack worth " << enemyAttack() << " health points!" << endl ;
+  cout << endl ;
+  cout << "Your block protects you from " << playerBlock() << " health points being taken away." ;
+    if(enemyAttack() > playerBlock()){
+      playerHealth = playerHealth - (enemyAttack() - playerBlock());
+      cout<< "Your health is now " << playerHealth << endl ;
+    }
+
+    else {
+      cout << "Your block was more powerful than the" << "\n" <<  "enemies attack, you win 10 gold coins!" << endl ;
+      goldCoins += 10 ;
+      cout << playername <<  " you now have " << goldCoins << " coins."<< endl ;
+
+    }
+}
+
+void attackLoopFN () {
+  if(playerHealth >= 0) attackLoop = true ;
+  else attackLoop = false ;
+  if(attackLoop == false ) cout << " Better Luck next time" << endl ;
+}
+
+void endingFN () {
+  cout << "Thanks for playong it's been great, can't wait to\nto see you again" << endl ;
+}
